@@ -22,20 +22,22 @@
   if(dado_ataque > dado_defesa){
     printf("O territorio atacante %s sucumbiu o territorio defensor %s\n", atacante -> nome, defensor -> nome);
     defensor -> tropas--;
-    printf("\n O territorio sucubindo %s perdeu 1 tropa\n", defensor -> nome);
+    printf("O territorio sucumbido %s perdeu 1 tropa\n", defensor -> nome);
+    printf("Resultado do dado: Atacante rolou: %d - Defensor rolou: %d\n", dado_ataque,dado_defesa);
 
     if(defensor -> tropas == 0){
-      printf("\n O atacante dizimou o territorio defensor\n");
+      printf("O atacante dizimou o territorio defensor\n");
       printf("--- TERRITORIO CONQUISTADO ---");
 
-      int metade = defensor -> tropas/2;
-      atacante -> tropas = metade;
+      int metade = atacante -> tropas/2;
+      defensor -> tropas = metade;
       strcpy(defensor->cor, atacante->cor);
     }
   } else {
-    printf("\n O territorio defensor persistiu ao ataque e ganhou\n");
+    printf("O territorio defensor persistiu ao ataque e ganhou\n");
     atacante -> tropas--;
     printf("Atacante foi sucumbido perdendo 1 tropa restante apenas %d\n", atacante -> tropas);
+    printf("Resultado do dado: Atacante rolou: %d - Defensor rolou: %d\n", dado_ataque,dado_defesa);
   }
  }
 
@@ -51,8 +53,6 @@ int main() {
   struct Territorio *terra = NULL;
   int totalterreno = 0;
   int opcao;
-  int ataquer;
-  int defende;
   int max_territorios = 0;
 
 
@@ -147,6 +147,9 @@ int main() {
         for(int i = 0; i < totalterreno; i++){
           printf("%d. %s (Exercito %s), Tropas: %d\n",i+1,terra[i].nome,terra[i].cor,terra[i].tropas);
         }
+        int ataquer;
+        int defende;
+        
           printf("\n--- FASE DE ATAQUE ---\n");
           printf("Escolha o territorio atacante (1 a 5, ou 0 para sair: ");
           scanf("%d", &ataquer);
@@ -192,7 +195,7 @@ int main() {
 
   // liberando a memória
   free(terra);
-  printf("\nMemoria liberad!\n");
+  printf("\nMemoria liberada!\n");
 
  return 0;
 }
