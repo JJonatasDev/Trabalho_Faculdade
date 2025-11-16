@@ -1,0 +1,160 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+#define fila_max 5
+
+// struct da peca
+typedef struct{
+    char nome;
+    int id;
+} Peca;
+
+// struct da fila circular
+typedef struct {
+    Peca jogo[fila_max];
+    int inicio;
+    int fim;
+    int tamanho;
+} fila_circular;
+
+// identificação da peca
+int IDprox = 0;
+
+// funcao para inicializar a fila
+void zerarfila(fila_circular *fila){
+    fila->inicio = 0;
+    fila->fim = 0;
+    fila->tamanho = 0;
+}
+
+// funcao que verifica se a fila esta vazia
+int filavazia(fila_circular *fila){
+   return fila->tamanho == 0; 
+}
+// funcao que verifica se a fila esta cheia
+int filacheia(fila_circular *fila){
+    return fila->tamanho == fila_max;
+}
+
+// geracao automatica das pecas
+Peca gerarpeca(){
+    Peca novapeca;
+    char nomenovo[] = {'I','O','T','L'};
+
+
+    novapeca.nome = nomenovo[rand() % 4];
+
+    novapeca.id = IDprox;
+    IDprox++;
+
+    return novapeca;
+}
+
+// funcao que enfileira a pecas na fila
+int enfileirar(fila_circular *fila, Peca peca){
+
+    if(filacheia(fila)){
+        return 0;
+    }
+
+    fila->jogo[fila->fim] = peca;
+
+    fila->fim = (fila->fim + 1) % fila_max;
+
+    fila->tamanho++;
+
+    return 1;
+}
+
+// funcao que remove uma peca da fila
+int remover(fila_circular *fila, Peca *removerpeca){
+
+    if(filavazia(fila)){
+        return 0;
+    }
+
+    *removerpeca = fila->jogo[fila->inicio];
+    
+    fila->inicio = (fila->inicio + 1) % fila_max;
+    
+    fila->tamanho--;
+    
+    return 1;
+
+}
+// funcao de exibicao da fila
+void mostrafila(fila_circular *fila){
+    printf("FILA DE PECAS\n");
+
+    if(filavazia(fila)){
+        printf("A FILA ESTA FAZIA\n");
+        return;
+    }
+
+    int i;
+    int local = fila->inicio;
+
+    for(i = 0; i < fila->tamanho; i++){
+        printf("NOME: %c ID: %d\n",fila->jogo[local].nome,fila->jogo[local].id);
+        local = (local + 1) % fila_max;
+    }
+
+}
+
+// funcao principal do programa
+int main(){
+
+    fila_circular fila;
+    int opcao;
+    Peca removida;
+
+    zerarfila(&fila);
+
+    int i;
+    for(i = 0; i < fila_max; i++){
+        Peca novapeca = gerarpeca();
+        enfileirar(&fila, novapeca);
+    }
+
+    
+    do{
+        mostrafila(&fila);
+
+        printf("================\n");
+        printf("      MENU\n");
+        printf("================\n");
+        printf("1 - Remover uma Peca\n");
+        printf("2 - Inserir uma nova Peca\n");
+        printf("0 - Sair do jogo\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao){
+
+        case 1:
+            printf("=== REMOVER UMA PECA ===\n");
+            if(remover(&fila,&removida)){
+                printf("Peca removida: [%c%d]\n",removida.nome,removida.id);
+            } else{
+                printf("O jogo está vazio\n");
+            }
+            break;
+        case 2:
+            printf("=== Enfileirar ===\n");
+            if(filacheia(&fila)){
+                printf("O jogo está cheio\n");
+            } else{
+                Peca novapeca = gerarpeca();
+                enfileirar(&fila, novapeca);
+                printf("Nova peca enfileirada: [%c%d]\n", novapeca.nome, novapeca.id);
+            }
+            break;
+        case 0:
+            printf("Saindo do jogo! Obg por Jogar\n");
+            break;
+        default:
+            printf("Digite uma opção valida!!!\n");
+            break;
+        }
+    } while( opcao != 0);
+}
