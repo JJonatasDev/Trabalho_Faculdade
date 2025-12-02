@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+//struct que recebe o nome Sala
 typedef struct Sala{
     char nome[50];
     struct Sala *esquerda;
     struct Sala *direita;
 }Sala;
 
-
+//função para criar uma sala
 Sala* criarsala(char *nomeSala){
     
     Sala *novaSala = (Sala *)malloc(sizeof(Sala));
@@ -26,6 +27,7 @@ Sala* criarsala(char *nomeSala){
     return novaSala;
 }
 
+//função responsável pela navegação pela árvore (Salas)
 void explorarSalas(Sala *salaAtual){
     char escolha;
 
@@ -74,6 +76,8 @@ void explorarSalas(Sala *salaAtual){
             }
         }
     }
+
+//corpor principal do programa
 int main(){
     printf("=====================================\n");
     printf("    BEM-VINDO AO JOGO\n");
